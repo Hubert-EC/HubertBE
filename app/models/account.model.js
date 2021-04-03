@@ -26,3 +26,5 @@ const accountSchema = new Schema({
         default: null,
       },
 })
+
+module.exports = Account = mongoose.model("Account", accountSchema);
