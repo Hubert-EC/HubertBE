@@ -1,17 +1,28 @@
-const sendSuccess = (res, data, message = 'success') => {
-    return res.status(200).json( {
-        message: message,
-        data: data
-    })
-}
+const { HTTP_STATUS_CODE } = require("../common/constant");
 
-const sendError = (res, message = 'internal server error') => {
-    return res.status(500).json({
-        message: message
-    })
-}
+const sendSuccess = (
+  res,
+  data,
+  message = "success",
+  status = HTTP_STATUS_CODE.OK
+) => {
+  return res.status(status).json({
+    message: message,
+    data: data,
+  });
+};
+
+const sendError = (
+  res,
+  message = "internal server error",
+  status = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
+) => {
+  return res.status(status).json({
+    message: message,
+  });
+};
 
 module.exports = {
-    sendError,
-    sendSuccess
-}
+  sendError,
+  sendSuccess,
+};

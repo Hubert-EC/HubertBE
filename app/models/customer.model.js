@@ -9,10 +9,9 @@ const customerSchema = new Schema({
   },
   firstName: {
     type: String,
-
   },
   lastName: {
-    type: String
+    type: String,
   },
   email: {
     type: String,
@@ -21,13 +20,18 @@ const customerSchema = new Schema({
   },
   phone: {
     type: String,
-    match: /^\d{10}$/,
+    match: /^0\d{9}$/,
     unique: true,
     required: true,
   },
   address: {
     type: String,
   },
+  // expiresAt: {
+  //   type: Date,
+  //   expires: 86400000,
+  //   default: new Date().setDate(new Date().getDate() + 1),
+  // },
 });
 
 module.exports = Customer = mongoose.model("Customer", customerSchema);
