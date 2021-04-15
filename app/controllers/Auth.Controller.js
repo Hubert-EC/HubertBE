@@ -18,6 +18,26 @@ const encodedToken = (userID) => {
   );
 };
 
+const AuthGoogle = async (req, res, next) => {
+  try {
+    const token = encodedToken(req.user._id);
+    res.setHeader("Authorization", token);
+    return res.status(HTTP_STATUS_CODE.OK).json({ success: true });
+  } catch (err) {
+    next(err)
+  }
+};
+
+const AuthFacebook = async (req, res, next) => {
+  try {
+    const token = encodedToken(req.user._id);
+    res.setHeader("Authorization", token);
+    return res.status(HTTP_STATUS_CODE.OK).json({ success: true });
+  } catch (err) {
+    next(err)
+  }
+};
+
 const register = async (req, res, next) => {
   try {
     const {
@@ -115,6 +135,8 @@ const verify = async (req, res, next) => {
 };
 
 module.exports = {
+  AuthFacebook,
+  AuthGoogle,
   register,
   login,
   verify,

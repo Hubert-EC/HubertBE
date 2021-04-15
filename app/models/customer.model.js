@@ -22,7 +22,6 @@ const customerSchema = new Schema({
     type: String,
     match: /^0\d{9}$/,
     unique: true,
-    required: true,
   },
   address: {
     type: String,
