@@ -12,6 +12,7 @@ const {
   FACEBOOK_CLIENT_SECRET,
 } = require("../../common/config")
 const Account = require("../../models/Account.Model");
+const Customer = require('../../models/Customer.Model')
 
 passport.use(
   new JwtStrategy(
@@ -66,7 +67,7 @@ passport.use(
           (err, count) => count
         );
         if (isExistsAcc) return done(null, false);
-
+        console.log(profile)
         const newAccount = new Account({
           authType: "google",
           authGoogleID: profile.id,
@@ -74,7 +75,14 @@ passport.use(
           //username: profile.displayName,
         });
         await newAccount.save();
-
+        const newCustomer = new Customer({
+          username: profile.displayName,
+          firstName: profile.name.familyName,
+          lastName: profile.name.givenName,
+          email: profile.emails[0].value,
+        })
+        await newCustomer.save()
+        
         done(null, newAccount);
       } catch (err) {
         done(err, false);
@@ -96,15 +104,19 @@ passport.use(
           (err, count) => count
         );
         if (isExistsAcc) return done(null, false);
-
         const newAccount = new Account({
           authType: "facebook",
           authFacebookID: profile.id,
           accountName: profile.emails[0].value,
-          //username: profile.displayName,
         });
         await newAccount.save();
-
+        const newCustomer = new Customer({
+          email: profile.emails[0].value,
+          firstName: profile.name.familyName,
+          lastName: profile.name.givenName,
+          username: profile.displayName
+        })
+        await newCustomer.save();
         done(null, newAccount);
       } catch (err) {
         done(err, false);
