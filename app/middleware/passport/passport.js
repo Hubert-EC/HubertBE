@@ -62,12 +62,12 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const isExistsAcc = await Account.countDocuments(
+        const user = await Account.countDocuments(
           { authGoogleID: profile.id, authType: "google" },
           (err, count) => count
         );
-        if (isExistsAcc) return done(null, false);
-        console.log(profile)
+        if (user) return done(null, user);
+        
         const newAccount = new Account({
           authType: "google",
           authGoogleID: profile.id,
@@ -75,6 +75,7 @@ passport.use(
           //username: profile.displayName,
         });
         await newAccount.save();
+
         const newCustomer = new Customer({
           username: profile.displayName,
           firstName: profile.name.familyName,
@@ -99,17 +100,19 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const isExistsAcc = await Account.countDocuments(
+        const user = await Account.countDocuments(
           { authFacebookID: profile.id, authType: "facebook" },
           (err, count) => count
         );
-        if (isExistsAcc) return done(null, false);
+        if (user) return done(null, user);
+
         const newAccount = new Account({
           authType: "facebook",
           authFacebookID: profile.id,
           accountName: profile.emails[0].value,
         });
         await newAccount.save();
+
         const newCustomer = new Customer({
           email: profile.emails[0].value,
           firstName: profile.name.familyName,

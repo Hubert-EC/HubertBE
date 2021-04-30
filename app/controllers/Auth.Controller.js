@@ -5,7 +5,6 @@ const { HTTP_STATUS_CODE } = require("../common/constant.js");
 const JWT = require("jsonwebtoken");
 const { JWT_SECRET } = require("../common/config");
 
-
 const encodedToken = (userID) => {
   return JWT.sign(
     {
@@ -24,7 +23,7 @@ const AuthGoogle = async (req, res, next) => {
     res.setHeader("Authorization", token);
     return res.status(HTTP_STATUS_CODE.OK).json({ success: true });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
@@ -34,7 +33,52 @@ const AuthFacebook = async (req, res, next) => {
     res.setHeader("Authorization", token);
     return res.status(HTTP_STATUS_CODE.OK).json({ success: true });
   } catch (err) {
-    next(err)
+    next(err);
+  }
+};
+
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email, newPass, rePass } = req.body;
+    const account = await Account.find({ accountName: email });
+    if (!account)
+      return sendError(
+        res,
+        "Tài khoản không tồn tại.",
+        HTTP_STATUS_CODE.NOT_FOUND
+      );
+
+    if (newPass != rePass)
+      return sendError(
+        res,
+        "Các mật khẩu đã nhập không khớp. Hãy thử lại",
+        HTTP_STATUS_CODE.FORBIDDEN
+      );
+
+    const newAccount = account;
+    newAccount.password = newPass;
+    const result = await Account.findByIdAndUpdate(account._id, newAccount);
+
+    if (!result)
+      return sendError(res, "Lỗi", HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
+
+    const token = encodedToken(newAccount._id);
+    res.setHeader("Authorization", token);
+    return sendSuccess(res, email, "success", HTTP_STATUS_CODE.OK);
+  } catch (error) {
+    return sendError(res, error.message, error.status);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const account = await Account.find({ accountName: email });
+    const token = encodedToken(account[0].idUser);
+    res.setHeader("Authorization", token);
+    return sendSuccess(res, "", "success", HTTP_STATUS_CODE.OK);
+  } catch (error) {
+    return sendError(res, error.message, error.status);
   }
 };
 
@@ -91,7 +135,7 @@ const register = async (req, res, next) => {
         "Đã xảy ra lỗi vui lòng thử lại",
         HTTP_STATUS_CODE.BAD_REQUEST
       );
-    
+
     const token = encodedToken(newAccount._id);
     res.setHeader("Authorization", token);
     return sendSuccess(res, email, "success", HTTP_STATUS_CODE.CREATE);
@@ -100,19 +144,7 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const account = await Account.find({accountName: email})
-    const token = encodedToken(account[0].idUser);  
-    res.setHeader("Authorization", token);
-    return sendSuccess(res, "", "success", HTTP_STATUS_CODE.OK);
-  } catch (error) {
-    return sendError(res, error.message, error.status);
-  }
-};
-
-const verify = async (req, res, next) => {
+const verifyCode = async (req, res, next) => {
   try {
     const { code, email } = req.body;
     const account = await Account.findOne({ accountName: email });
@@ -120,7 +152,7 @@ const verify = async (req, res, next) => {
     if (code == account.code) {
       account.status = "activated";
       //account.expiresAt = null;
-      await account.save()
+      await account.save();
       return sendSuccess(res, email, "success", HTTP_STATUS_CODE.OK);
     }
 
@@ -139,5 +171,6 @@ module.exports = {
   AuthGoogle,
   register,
   login,
-  verify,
+  verifyCode,
+  forgotPassword,
 };

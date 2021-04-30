@@ -17,12 +17,13 @@ router
 router
   .route("/auth/facebook")
   .post(
-    passport.authenticate("facebook-token",{ session: false }),
+    passport.authenticate("facebook-token", { session: false }),
     controller.AuthFacebook
   );
 
 router.route("/register").post(controller.register);
-router.route("/verify").post(controller.verify);
+router.route("/verify").post(controller.verifyCode);
+router.route("/forgotPassword").post(controller.forgotPassword);
 router.route("/login").post(
   passport.authenticate("local", {
     session: false,

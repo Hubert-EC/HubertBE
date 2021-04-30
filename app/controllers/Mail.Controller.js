@@ -18,7 +18,7 @@ const sendCodeMail = async (req, res, next) => {
     const body = "Welcome to Hubert: " + code;
     await mailer(to, "Kích hoạt tài khoản", body);
 
-    return sendSuccess(res, code , "success", HTTP_STATUS_CODE.OK);
+    return sendSuccess(res, "" , "success", HTTP_STATUS_CODE.OK);
   } catch (error) {
     return sendError(res, error.message, error.status);
   }
