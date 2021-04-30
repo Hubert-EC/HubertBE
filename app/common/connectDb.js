@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const {MONGODB_URI} = require('./config')
-
+const { MONGODB_URI } = require("./config");
 
 const connectDb = () => {
   mongoose
@@ -9,8 +8,8 @@ const connectDb = () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
-    .then(() => console.log("Sucess!!!!"))
+    .then(() => console.log("Success!!!!"))
     .catch((error) => console.error("Failed: ", error));
 };
 
-module.exports = connectDb
+module.exports = connectDb;

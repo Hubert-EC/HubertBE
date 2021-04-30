@@ -9,7 +9,7 @@ const deliveryCompanySchema = new Schema({
   },
   phone: {
     type: String,
-    match: /^\d{10}$/,
+    match: /^0\d{9}$/,
     unique: true,
     required: true,
   },
@@ -17,11 +17,18 @@ const deliveryCompanySchema = new Schema({
     type: String,
   },
   companyName: {
-      type: String,
-      required: true,
-      unique: true,
+    type: String,
+    required: true,
+    unique: true,
   },
-  idServicePackage : String,
+  idServicePackage: {
+    type: String,
+    required: true,
+    match: /^[A-Z0-9]{6}$/,
+  },
 });
 
-module.exports = deliveryCompany = mongoose.model("Delivery Company", deliveryCompanySchema);
+module.exports = DeliveryCompany = mongoose.model(
+  "Delivery Company",
+  deliveryCompanySchema
+);
