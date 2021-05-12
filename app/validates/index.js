@@ -12,6 +12,7 @@ module.exports.validateParam = (schema, id) => {
     }
   };
 };
+
 module.exports.validateBody = (schema) => {
   return (req, res, next) => {
     const validatorResult = schema.validate(req.body);

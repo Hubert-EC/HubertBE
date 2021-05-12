@@ -2,6 +2,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const deliveryCompanySchema = new Schema({
+  username: {
+    type: String,
+    minLength: 3,
+  },
+  companyName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   email: {
     type: String,
     unique: true,
@@ -9,19 +18,27 @@ const deliveryCompanySchema = new Schema({
   },
   phone: {
     type: String,
-    match: /^\d{10}$/,
+    match: /^0\d{9}$/,
     unique: true,
     required: true,
   },
-  address: {
+  firstName: {
     type: String,
+    required: true,
   },
-  companyName: {
-      type: String,
-      required: true,
-      unique: true,
+  lastName: {
+    type: String,
+    required: true,
   },
-  idServicePackage : String,
-});
+  address:[String],
+  idServicePackage: {
+    type: String,
+    match: /^[A-Z0-9]{6}$/,
+  },
+  avt : String,
+}, { timestamps: { createdAt: 'created_at' } });
 
-module.exports = deliveryCompany = mongoose.model("Delivery Company", deliveryCompanySchema);
+module.exports = DeliveryCompany = mongoose.model(
+  "Delivery Company",
+  deliveryCompanySchema
+);
