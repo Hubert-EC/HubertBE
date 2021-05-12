@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const customerSchema = new Schema({
   username: {
     type: String,
-    required: true,
     minLength: 3,
   },
   firstName: {
@@ -25,12 +24,13 @@ const customerSchema = new Schema({
   },
   address: {
     type: String,
-  },
+  }, 
+  avt : String,
   // expiresAt: {
   //   type: Date,
   //   expires: 86400000,
   //   default: new Date().setDate(new Date().getDate() + 1),
   // },
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Customer = mongoose.model("Customer", customerSchema);

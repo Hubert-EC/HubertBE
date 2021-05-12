@@ -72,6 +72,6 @@ const billSchema = new Schema({
         enum: ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã hủy", "Giao thành công"],
         default: "Chờ xác nhận",
     },
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = Bill = mongoose.model('Bill', billSchema);

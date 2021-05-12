@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const serviceSchema = new Schema({
-  _id: {
+  code: {
     type: String,
     required: true,
     unique: true,
@@ -35,6 +35,6 @@ const serviceSchema = new Schema({
       default: Date.now,
     }
   }
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Service = mongoose.model("Service", serviceSchema);

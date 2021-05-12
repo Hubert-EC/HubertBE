@@ -11,7 +11,7 @@ const packageSchema = new Schema({
     required: true,
   },
   type: {
-    type: Sting,
+    type: String,
     enum: ["Thực phẩm", "Quần áo", "Điện tử", "Dễ vỡ", "Khác"],
     default: "Khác",
   },
@@ -25,6 +25,6 @@ const packageSchema = new Schema({
     default: "kg",
   },
   notes: String,
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Package = mongoose.model("Package", packageSchema);

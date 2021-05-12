@@ -1,24 +1,19 @@
 const { HTTP_STATUS_CODE } = require("../common/constant");
 
-const sendSuccess = (
-  res,
-  data,
-  message = "success",
-  status = HTTP_STATUS_CODE.OK
-) => {
+const sendSuccess = (res, data = {}, message, status) => {
   return res.status(status).json({
-    message: message,
+    message: message || "success",
     data: data,
   });
 };
 
 const sendError = (
   res,
-  message = "internal server error",
+  message,
   status = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR
 ) => {
   return res.status(status).json({
-    message: message,
+    message: message || "Internal server error",
   });
 };
 

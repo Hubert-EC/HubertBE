@@ -14,6 +14,6 @@ const evaluateSchema = new Schema({
   content: {
     type: String,
   },
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = Evaluate = mongoose.model("Evaluate", evaluateSchema)

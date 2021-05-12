@@ -10,6 +10,6 @@ const policySchema = new Schema({
         type: String,
         required: true,
     }
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = Policy = mongoose.model('Policy', policySchema)

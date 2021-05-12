@@ -12,6 +12,6 @@ const costSheetSchema = new Schema({
         cost: Number,
     },
     description: String,
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = CostSheet = mongoose.model('Cost Sheet', costSheetSchema) 

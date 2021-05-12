@@ -5,7 +5,6 @@ const mailHost = "smtp.gmail.com";
 const mailPort = PORT_SEND_MAIL;
 
 const sendMail = (to, subject, htmlContent) => {
-  console.log("port: ", mailPort)
   const transporter = nodeMailer.createTransport({
     host: mailHost,
     port: 465,

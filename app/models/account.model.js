@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcryptjs = require("bcryptjs");
 
 const accountSchema = new Schema({
   accountName: {
@@ -12,28 +11,29 @@ const accountSchema = new Schema({
     type: String,
     minLength: 8,
   },
+  phone: {
+    type: String,
+    match: /^0\d{9}$/,
+    unique: true,
+  }, 
   role: {
     type: String,
     enum: ["admin", "customer", "company"],
     default: "customer",
   },
-  status: {
-    type: String,
-    enum: ["not activated", "activated"],
-    default: "not activated",
+  isVerified: {
+    type: Boolean,
+    default: false
   },
-  code: {
+  otp: {
     type: String,
     match: /^\d{6}$/,
   },
-  // expiresAt: {
-  //   type: Date,
-  //   expires: 86400000,
-  //   default: Date.now,
-  // },
+  resetLink: {
+    type: String,
+    default: '',
+  },
   idUser: {
-    // type: String,
-    // match: /^[a-zA-Z0-9]{24}$/,
     type: Schema.Types.ObjectId,
   },
   authType: {
@@ -49,26 +49,6 @@ const accountSchema = new Schema({
     type: String,
     default: null,
   },
-});
-
-accountSchema.pre("save", async function (next) {
-  try {
-    if (this.authType != 'local') return next();
-    const salt = await bcryptjs.genSalt(10);
-    const passwordHashed = await bcryptjs.hash(this.password, salt);
-    this.password = passwordHashed;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-accountSchema.methods.verifyPassword = async function (reqPassword, next) {
-  try {
-    return await bcryptjs.compare(reqPassword, this.password);
-  } catch (error) {
-    next(error);
-  }
-};
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Account = mongoose.model("Account", accountSchema);

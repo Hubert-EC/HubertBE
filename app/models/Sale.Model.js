@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const saleSchema = new Schema({
-  _id: {
+  code: {
     type: String,
     required: true,
     unique: true,
@@ -44,6 +44,6 @@ const saleSchema = new Schema({
     enum: ["Khả dụng", "Hết hạn", "Hết mã"],
     default: "Khả dụng",
   },
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Sale = mongoose.model("Sale", saleSchema);
