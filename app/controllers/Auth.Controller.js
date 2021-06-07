@@ -6,6 +6,7 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
+  activeDelivery,
 } = require("../services/Auth.Services");
 const { encodedToken } = require("../services/Token.Services");
 const { sendError, sendSuccess } = require("./Controller");
@@ -178,18 +179,19 @@ const handleChangePassword = async (req, res, next) => {
   }
 }; //done
 
-const test = async (req, res, next) => {
+const handleActiveDelivery =  async (req, res, next) => {
   try {
-    // const result = await sendLinkResetPassword(
-    //   "nhai30928@gmail.com",
-    //   "1239402132931"
-    // );
-    // console.log(result.success);
-    // return sendSuccess(res, result.data, result.message, result.status);
+    const {email} = req.body
+    const result = await activeDelivery(email)
+    if (!result.success) {
+      return sendError(res, result.message, result.status);
+    }
+
+    return sendSuccess(res, result.data, result.message, result.status);
   } catch (error) {
     return sendError(res, error.message, error.status);
   }
-};
+}
 
 module.exports = {
   handleAuthFacebook,
@@ -201,5 +203,5 @@ module.exports = {
   handleResetPassword,
   handleVerifyOtp,
   handleChangePassword,
-  test,
+  handleActiveDelivery,
 };
