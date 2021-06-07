@@ -2,16 +2,20 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const costSheetSchema = new Schema({
-    CompanyID: {
-      type: Schema.Types.ObjectId,
-      required: true,
+    _id: String,
+    maxKg: Number,
+    firstPrice: {
+      price: Number,
+      km: Number,
+      kg: Number
     },
-    cost: {
-        normal: Number,
-        km: Number,
-        cost: Number,
+    maxSize: {
+      length: Number,
+      width: Number,
+      hight: Number,
     },
-    description: String,
+    pricePerKm: Number,
+    pricePerKg: Number,
 }, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = CostSheet = mongoose.model('Cost Sheet', costSheetSchema) 

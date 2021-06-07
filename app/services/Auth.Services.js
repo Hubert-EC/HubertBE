@@ -4,7 +4,6 @@ const {
   sendLinkResetPassword,
   sendMailContact,
 } = require("../services/Mail.Services");
-//const { encodedToken, verify } = require("./Token.Services");
 const { HTTP_STATUS_CODE } = require("../common/constant");
 const bcrypt = require("bcrypt")
 
@@ -364,6 +363,34 @@ const checkRole = async (req, res, next) => {
   }
 }; //done
 
+const activeDelivery = async (email) => {
+  try {
+    const account = await Account.findOne({accountName: email})
+    if (!account) 
+      return {
+        success: false,
+        message: "User not found",
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+      }
+
+    account.isVerified = true;
+    await account.save();
+
+    return {
+      success: true,
+      data: "",
+      message: "Active Successfully",
+      status: HTTP_STATUS_CODE.OK,
+    }
+  } catch (error) {
+    return {
+      message: error.message,
+      status: error.status,
+      success: false,
+    }
+  }
+}; //done
+
 module.exports = {
   registerCustomer,
   registerDeliveryCompany,
@@ -373,4 +400,5 @@ module.exports = {
   resetPassword,
   changePassword,
   checkRole,
+  activeDelivery,
 };
