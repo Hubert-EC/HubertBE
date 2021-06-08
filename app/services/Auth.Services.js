@@ -144,7 +144,6 @@ const login = async (email, password) => {
       password,
       account.password
     );
-    console.log(isCorrectPassword)
     if (!isCorrectPassword) {
       return {
         message: "Password is incorrect",
