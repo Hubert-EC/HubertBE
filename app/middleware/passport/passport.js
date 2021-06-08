@@ -12,23 +12,6 @@ const {
 } = require("../../common/config");
 const { Account, Customer } = require("../../models/Index.Model");
 
-// passport.use(
-//   new JwtStrategy(
-//     {
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken("Authorization"),
-//       secretOrKey: JWT_SECRET,
-//     },
-//     async (payload, done) => {
-//       try {
-//         const user = await Account.findById(payload.id);
-//         if (!user) return done(null, false);
-//         done(null, { user: user, exp: payload.exp });
-//       } catch (err) {
-//         done(err, false);
-//       }
-//     }
-//   )
-// );
 
 passport.use(
   new GooglePlusTokenStrategy(
