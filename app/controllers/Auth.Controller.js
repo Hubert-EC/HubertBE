@@ -51,9 +51,10 @@ const handleLogin = async (req, res, next) => {
     }
 
     const accessToken = encodedToken(result.data._id);
+    const role = result.data.role
     res.setHeader("Authorization", accessToken);
 
-    return sendSuccess(res, accessToken, result.message, result.status);
+    return sendSuccess(res, {accessToken: accessToken, role: role} , result.message, result.status);
   } catch (error) {
     return sendError(res, error.message, error.status);
   }

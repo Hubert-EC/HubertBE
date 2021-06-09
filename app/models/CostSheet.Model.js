@@ -1,13 +1,21 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const costSheetSchema = new Schema({
-    _id: String,
+const costSheetSchema = new Schema(
+  {
+    idCompany: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    companyName: {
+      type: String,
+      required: true,
+    },
     maxKg: Number,
     firstPrice: {
       price: Number,
       km: Number,
-      kg: Number
+      kg: Number,
     },
     maxSize: {
       length: Number,
@@ -16,6 +24,8 @@ const costSheetSchema = new Schema({
     },
     pricePerKm: Number,
     pricePerKg: Number,
-}, { timestamps: { createdAt: 'created_at' } })
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-module.exports = CostSheet = mongoose.model('Cost Sheet', costSheetSchema) 
+module.exports = CostSheet = mongoose.model("Cost Sheet", costSheetSchema);

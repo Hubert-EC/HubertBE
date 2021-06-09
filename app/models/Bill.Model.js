@@ -34,7 +34,7 @@ const billSchema = new Schema({
         }
     },
     companyID: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     packageID: {
@@ -45,13 +45,16 @@ const billSchema = new Schema({
         type: Number,
         required: true,
     },
+    distance: {
+      type: Number,
+      required: true,
+    },
     finalPrice: {
         type: Number,
         required: true,
     },
     saleCode: {
-      type: String,
-      required: true
+      type: String
     },
     paymentType: {
         type: String,

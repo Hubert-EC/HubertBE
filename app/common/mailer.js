@@ -7,7 +7,7 @@ const mailPort = PORT_SEND_MAIL;
 const sendMail = (to, subject, htmlContent) => {
   const transporter = nodeMailer.createTransport({
     host: mailHost,
-    port: 465,
+    port: mailPort,
     secure: true,
     auth: {
       user: ADMIN_EMAIL,

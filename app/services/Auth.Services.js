@@ -5,6 +5,7 @@ const {
   sendMailContact,
 } = require("../services/Mail.Services");
 const { HTTP_STATUS_CODE } = require("../common/constant");
+const {encodedToken} = require("./Token.Services")
 const bcrypt = require("bcrypt")
 
 const registerCustomer = async (
@@ -115,7 +116,7 @@ const registerDeliveryCompany = async (
 
     await sendMailContact(email);
     return {
-      message: "Register Successfully",
+      message: "Register Successfully. Please check your email for more information",
       success: true,
       status: HTTP_STATUS_CODE.CREATE,
       data: "",
@@ -227,15 +228,6 @@ const forgotPassword = async (email) => {
 
 const resetPassword = async (resetLink, newPass) => {
   try {
-    const result = await verify(resetLink);
-    if (!result.success) {
-      return {
-        message: result.message,
-        success: false,
-        status: result.status,
-      };
-    }
-
     const account = await Account.findOne({ resetLink });
 
     if (!account) {
@@ -246,7 +238,8 @@ const resetPassword = async (resetLink, newPass) => {
       };
     }
 
-    account.password = newPass;
+    const hashedPassword = await bcrypt.hash(newPass, 10);
+    account.password = hashedPassword;
     await account.save();
 
     return {
@@ -275,7 +268,7 @@ const changePassword = async (id, oldPass, newPass) => {
       };
     }
 
-    const isCorrectPassword = await bcryptjs.compare(oldPass, account.password);
+    const isCorrectPassword = await bcrypt.compare(oldPass, account.password);
     if (!isCorrectPassword) {
       return {
         message: "Old password is incorrect",
@@ -284,7 +277,8 @@ const changePassword = async (id, oldPass, newPass) => {
       };
     }
 
-    account.password = newPass;
+    const hashedPassword = await bcrypt.hash(newPass, 10);
+    account.password = hashedPassword;
     await account.save();
     return {
       message: "Change password successfully",
