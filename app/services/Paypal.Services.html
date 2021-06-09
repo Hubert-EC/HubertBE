@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Hubert PayPal Payment</title>
+    <style>
+      input[type="submit"] {
+        width: 100%;
+        background-color: #376fe9;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #477ee6;
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      .form {
+        margin: 0 auto;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        width: 450px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form">
+      <img
+        src="https://scontent-xsp1-1.xx.fbcdn.net/v/t1.6435-9/192905914_104710585161404_4392775475346207246_n.png?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=xcAUYhJSyX4AX8RvbeT&tn=hff93JUPQa2QN0kh&_nc_ht=scontent-xsp1-1.xx&oh=573ae2ffb904db34c54704d0b1ed91e4&oe=60E5377A"
+        width="40%"
+      />
+      <h1>Payment Information</h1>
+      <form action="/api/paypal/payment" method="post">
+        <label for="senderName">Tên người gửi</label>
+        <input
+          type="text"
+          id="senderName"
+          value="Lê Ngọc Hải"
+          name="senderName"
+          placeholder="Tên người gửi"
+        />
+
+        <label for="senderAddress">Địa chỉ người gửi</label>
+        <input
+          type="text"
+          id="senderAddress"
+          value="1 Võ Văn Ngân, Linh Chiểu, TP Thủ Đức"
+          name="senderAddress"
+          placeholder="Địa chỉ người gửi"
+        />
+
+        <label for="senderPhone">Số điện thoại người gửi</label>
+        <input
+          type="text"
+          id="senderPhone"
+          value="0968952203"
+          name="senderPhone"
+          placeholder="Số điện thoại người gửi"
+        />
+
+        <label for="receiverName">Tên người nhận</label>
+        <input
+          type="text"
+          id="receiverName"
+          value="Đỗ Phạm Trúc Quỳnh"
+          name="receiverName"
+          placeholder="Tên người nhận"
+        />
+
+        <label for="receiverAddress">Địa chỉ người nhận</label>
+        <input
+          type="text"
+          id="receiverAddress"
+          value="502 Đỗ Xuân Hợp, Phước Bình, TP Thủ Đức"
+          name="receiverAddress"
+          placeholder="Địa chỉ người nhận"
+        />
+
+        <label for="receiverPhone">Số điện thoại người nhận</label>
+        <input
+          type="text"
+          id="receiverPhone"
+          value="0909775658"
+          name="receiverPhone"
+          placeholder="Số điện thoại người nhận"
+        />
+
+        <label for="namePackage">Tên mặt hàng</label>
+        <input
+          type="text"
+          id="namePackage"
+          value="Nón bảo hiểm"
+          name="namePackage"
+        />
+
+        <label for="weight">Trọng lượng</label>
+        <input type="text" id="weight" value="2" name="weight" />
+
+        <label for="hight">Chiều cao</label>
+        <input type="text" id="hight" value="20" name="hight" />
+
+        <label for="length">Chiều dài</label>
+        <input type="text" id="length" value="20" name="length" />
+
+        <label for="width">Chiều rộng</label>
+        <input type="text" id="width" value="20" name="width" />
+
+        <label for="typePackage">Loại mặt hàng</label>
+        <select id="typePackage" name="typePackage">
+          <option value="Thực phẩm">Thực phẩm</option>
+          <option value="Quần áo">Quần áo</option>
+          <option value="Điện tử">Điện tử</option>
+          <option value="Dễ vỡ">Dễ vỡ</option>
+          <option value="Khác">Khác</option>
+        </select>
+
+        <label for="notes">Ghi chú</label>
+        <input
+          type="text"
+          id="notes"
+          value="Giao tận tay dùm em"
+          name="notes"
+        />
+
+        <label for="distance">Khoảng cách (km)</label>
+        <input type="text" id="distance" value="4.3" name="distance" />
+
+        <label for="price">Giá</label>
+        <input type="text" id="price" value="27650" name="price" />
+
+        <label for="companyName">Tên đơn vị vận chuyển</label>
+        <select id="companyName" name="companyName">
+          <option value="GRAB">Grab Express</option>
+          <option value="LALAMOVE">Lalamove</option>
+          <option value="GHTK">GHTK</option>
+        </select>
+
+        <label for="accessToken">Access token</label>
+        <input type="text" id="accessToken" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIdWJlcnQiLCJpZCI6IjYwOWJhOWQzMmY5OWRjMDZiNDIyZWFmOSIsImlhdCI6MTYyMzI0OTMzMjkxMCwiZXhwIjoxNjIzMzM1NzMyOTEwfQ.Rneyb0u-ksMh2l8uyrEfLwbK_ecRlKTv01Lv2JOvbCM" name="accessToken" />
+
+        <input type="submit" value="Thanh toán" id="submitButton" />
+      </form>
+    </div>
+  </body>
+</html>

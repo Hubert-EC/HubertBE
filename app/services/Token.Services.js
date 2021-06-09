@@ -38,11 +38,38 @@ const verifyToken = (req, res, next) => {
   } catch (error) {
     return res.status(error.status).json({
       message: error.message,
+      access: false,
     });
   }
 }; //done
 
+const verifyResetLink = (req, res, next) => {
+  try {
+    let token = req.body.resetLink
+    if (!token) {
+      token = req.body.accessToken
+    }
+    JWT.verify(token, JWT_SECRET, (error, decodedFromToken) => {
+      if (error) {
+        return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+          message: "Failed to verify token",
+          access: false,
+        });
+      } else {
+        req.body.token = decodedFromToken;
+        next()
+      }
+    });
+  } catch (error) {
+    return res.status(error.status).json({
+      message: error.message,
+      access: false,
+    });
+  }
+}
+
 module.exports = {
   encodedToken,
   verifyToken,
+  verifyResetLink
 };

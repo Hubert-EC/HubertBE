@@ -1,7 +1,6 @@
 const { HTTP_STATUS_CODE } = require("../common/constant");
-const { Bill, CostSheet } = require("../models/Index.Model");
-
-const createOrder = async () => {};
+const { sendError, sendSuccess } = require("../controllers/Controller");
+const { Bill, CostSheet, Package } = require("../models/Index.Model");
 
 const calculateShip = async (hight, width, length, kg, km) => {
   try {
@@ -11,10 +10,10 @@ const calculateShip = async (hight, width, length, kg, km) => {
     return {
       message: "Calculate Successfully",
       success: true,
-      data: { 
-        Lalamove: LALAMOVE.data, 
-        Ghtk: GHTK.data, 
-        Grab: GRAB.data 
+      data: {
+        Lalamove: LALAMOVE.data,
+        Ghtk: GHTK.data,
+        Grab: GRAB.data,
       },
       status: HTTP_STATUS_CODE.OK,
     };
@@ -25,11 +24,11 @@ const calculateShip = async (hight, width, length, kg, km) => {
       status: error.status,
     };
   }
-};
+}; //done
 
 const shipPriceGHTK = async (kg) => {
   try {
-    const GHTK = await CostSheet.findById("GHTK");
+    const GHTK = await CostSheet.findOne({ companyName: "GHTK" });
     let price = GHTK.firstPrice.price;
     if (kg > GHTK.firstPrice.kg) {
       price += (kg - GHTK.firstPrice.kg) * GHTK.pricePerKg;
@@ -48,11 +47,11 @@ const shipPriceGHTK = async (kg) => {
       status: error.status,
     };
   }
-};
+}; //done
 
 const shipPriceLalamove = async (hight, width, length, kg, km) => {
   try {
-    const Lalamove = await CostSheet.findById("LALAMOVE");
+    const Lalamove = await CostSheet.findOne({ companyName: "LALAMOVE" });
     if (
       kg <= Lalamove.maxKg &&
       hight <= Lalamove.maxSize.hight &&
@@ -84,11 +83,11 @@ const shipPriceLalamove = async (hight, width, length, kg, km) => {
       status: error.status,
     };
   }
-};
+}; //done
 
 const shipPriceGrabExpress = async (km) => {
   try {
-    const GrabExpress = await CostSheet.findById("GRAB");
+    const GrabExpress = await CostSheet.findOne({ companyName: "GRAB" });
     let priceShip = GrabExpress.firstPrice.price;
     if (km > GrabExpress.firstPrice.km) {
       priceShip += (km - GrabExpress.firstPrice.km) * GrabExpress.pricePerKm;
@@ -106,8 +105,78 @@ const shipPriceGrabExpress = async (km) => {
       status: error.status,
     };
   }
-};
+}; //done
+
+const saveBill = async (req, res, next) => {
+  const {
+    idUser,
+    senderName,
+    senderAddress,
+    senderPhone,
+    receiverName,
+    receiverAddress,
+    receiverPhone,
+    namePackage,
+    weight,
+    hight,
+    length,
+    width,
+    distance,
+    typePackage,
+    companyId,
+    price,
+    notes,
+  } = req.query;
+
+  const package = new Package({
+    idUser: idUser,
+    name: namePackage,
+    type: typePackage,
+    size: {
+      length: length,
+      width: width,
+      hight: hight,
+    },
+    weight: weight,
+    notes: notes,
+  });
+  await package.save();
+
+  const bill = new Bill({
+    sender: {
+      _id: idUser,
+      name: senderName,
+      address: senderAddress,
+      phone: senderPhone,
+    },
+    receiver: {
+      name: receiverName,
+      address: receiverAddress,
+      phone: receiverPhone,
+    },
+    companyID: companyId,
+    packageID: package._id,
+    shipPrice: price,
+    distance: distance,
+    finalPrice: price,
+    saleCode: null,
+    paymentType: "PayPal",
+  });
+
+  await bill.save();
+
+  return sendSuccess(
+    res,
+    {
+      bill: bill,
+      package: package,
+    },
+    "Payment successfully",
+    HTTP_STATUS_CODE.OK
+  );
+}; //done
 
 module.exports = {
   calculateShip,
+  saveBill,
 };

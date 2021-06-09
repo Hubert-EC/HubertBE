@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const packageSchema = new Schema({
-  idBill: {
+  idUser: {
     type: Schema.Types.ObjectId,
-    required: true,
+    required: true
   },
   name: {
     type: String,
@@ -15,14 +15,14 @@ const packageSchema = new Schema({
     enum: ["Thực phẩm", "Quần áo", "Điện tử", "Dễ vỡ", "Khác"],
     default: "Khác",
   },
+  size: {
+    length: Number,
+    width: Number,
+    hight: Number,
+  },
   weight: {
     type: Number,
     required: true,
-  },
-  digit: {
-    type: String,
-    enum: ["kg", "g"],
-    default: "kg",
   },
   notes: String,
 }, { timestamps: { createdAt: 'created_at' } });
