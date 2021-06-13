@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", router);
-
+app.use("/",(req,res)=>res.send(":))))"))
 connectDb();
 
 
