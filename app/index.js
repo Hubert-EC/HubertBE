@@ -16,4 +16,4 @@ app.get("/test-paypal", (req, res) => {
   res.sendFile(__dirname + "/services/Paypal.Services.html");
 });
 
-app.listen(PORT || 8080, () => console.log(`Listen on port ${PORT}`));
+app.listen(process.env.PORT || 8080, () => console.log(`Listen on port ${PORT}`));
