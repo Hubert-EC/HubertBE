@@ -11,7 +11,7 @@ app.use("/api", router);
 
 connectDb();
 
-app.use("/",(req,res)=>res.send("Hubert"))
+app.use("/", (req, res) => res.send("Hubert"));
 app.get("/test-paypal", (req, res) => {
   res.sendFile(__dirname + "/services/Paypal.Services.html");
 });

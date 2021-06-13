@@ -6,7 +6,8 @@
   "author": "theleehari <nhai30928@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "14.15.5"
+    "node": "14.15.5",
+    "yarn": "1.22.10"
   },
   "scripts": {
     "start": "nodemon app/index.js"
