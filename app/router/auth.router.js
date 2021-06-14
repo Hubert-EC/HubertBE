@@ -7,7 +7,6 @@ const {} = require("../middleware/passport/passport"); //* config passport
 const { verifyToken, verifyResetLink } = require("../services/Token.Services");
 const { checkRole, activeDelivery } = require("../services/Auth.Services.js");
 const {validateBody, validateParam, schemas} = require("../middleware/validate/index");
-const { schema } = require("../models/Account.Model.js");
 router.use(passport.initialize());
 
 router
