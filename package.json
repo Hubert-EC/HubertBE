@@ -1,7 +1,7 @@
 {
   "name": "UTE1.21-EC18A009-BE",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/Hubert-EC/HubertBE",
   "author": "theleehari <nhai30928@gmail.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "yarn": "1.22.10"
   },
   "scripts": {
-    "start": "nodemon app/index.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",

@@ -1,8 +1,8 @@
 const express = require("express");
-const connectDb = require("./common/connectDb");
+const connectDb = require("./app/common/connectDb");
 const app = express();
-const { PORT} = require("./common/config");
-const router = require("./router/index.router");
+const { PORT} = require("./app/common/config");
+const router = require("./app/router/index.router");
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 });
 
 app.get("/test-paypal", (req, res) => {
-  res.sendFile(__dirname + "/services/Paypal.Services.html");
+  res.sendFile(__dirname + "/app/services/Paypal.Services.html");
 });
 
 app.listen(PORT || 8080, () => console.log(`Listen on port ${8080}`));
