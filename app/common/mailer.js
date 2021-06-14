@@ -6,6 +6,7 @@ const mailPort = PORT_SEND_MAIL;
 
 const sendMail = (to, subject, htmlContent) => {
   const transporter = nodeMailer.createTransport({
+    service: 'gmail',
     host: mailHost,
     port: mailPort,
     secure: true,
