@@ -1,7 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const connectDb = require("./common/connectDb");
 const app = express();
-//const { PORT} = require("./common/config");
+const { PORT} = require("./common/config");
 const router = require("./router/index.router");
 const bodyParser = require("body-parser");
 
@@ -21,5 +22,5 @@ app.get("/test-paypal", (req, res) => {
   res.sendFile(__dirname + "/services/Paypal.Services.html");
 });
 
-const port = process.env.PORT || 8080
-app.listen(port, () => console.log(`Listen on port ${port}`));
+
+app.listen(PORT, () => console.log(`Listen on port ${PORT}`));
