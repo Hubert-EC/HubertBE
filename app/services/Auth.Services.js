@@ -209,13 +209,20 @@ const forgotPassword = async (email) => {
     account.resetLink = resetLink;
     await account.save();
 
-    await sendLinkResetPassword(email, resetLink);
+    const result = await sendLinkResetPassword(email, resetLink);
+
+    if (!result) 
+      return {
+        message: result.message,
+        success: false,
+        status: result.status,
+      }
 
     return {
-      message: "Reset password link has been sent",
+      message: result.message,
       data: "",
       success: true,
-      status: HTTP_STATUS_CODE.OK,
+      status: result.status,
     };
   } catch (error) {
     return {
