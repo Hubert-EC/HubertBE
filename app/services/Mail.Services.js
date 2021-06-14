@@ -30,13 +30,13 @@ const sendLinkResetPassword = async (email, resetLink) => {
                   Hubert`;
     const result = await mailer(email, "Forgot Password", body);
 
-    if (!result) {
+    if (!result) 
       return {
         message: "Try again",
         success: false,
         status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       }
-    }
+    
 
     return {
       message: "Reset password link has been sent",
