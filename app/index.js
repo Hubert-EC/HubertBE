@@ -1,7 +1,7 @@
 const express = require("express");
 const connectDb = require("./common/connectDb");
 const app = express();
-const { PORT, ACCESS_TOKEN } = require("./common/config");
+//const { PORT} = require("./common/config");
 const router = require("./router/index.router");
 const bodyParser = require("body-parser");
 
@@ -11,9 +11,15 @@ app.use("/api", router);
 
 connectDb();
 
+app.use("/", (req, res) => res.send("Hubert"));
+
+app.get('/', (req, res) => {
+  res.send("Hubert");
+});
 
 app.get("/test-paypal", (req, res) => {
   res.sendFile(__dirname + "/services/Paypal.Services.html");
 });
 
-app.listen(PORT, () => console.log(`Listen on port ${PORT}`));
+const port = process.env.PORT || 8080
+app.listen(port, () => console.log(`Listen on port ${port}`));
