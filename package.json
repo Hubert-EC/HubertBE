@@ -10,7 +10,8 @@
     "yarn": "1.22.10"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
