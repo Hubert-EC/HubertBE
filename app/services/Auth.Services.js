@@ -209,14 +209,7 @@ const forgotPassword = async (email) => {
     account.resetLink = resetLink;
     await account.save();
 
-    const result = await sendLinkResetPassword(email, resetLink);
-    console.log("result:", result.status)
-    if (!result.success) 
-      return {
-        message: result.message,
-        success: false,
-        status: result.status,
-      }
+    await sendLinkResetPassword(email, resetLink);
 
     return {
       message: result.message,

@@ -1,3 +1,4 @@
+const e = require("express");
 const nodeMailer = require("nodemailer");
 const { ADMIN_EMAIL, ADMIN_EMAIL_PASSWORD, PORT_SEND_MAIL } = require("./config");
 
@@ -23,7 +24,13 @@ const sendMail = (to, subject, htmlContent) => {
     html: htmlContent,
   };
 
-  return transporter.sendMail(options);
+  transporter.sendMail(options, (error, info) => {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log("Success")
+    }
+  });
 };
 
 module.exports = sendMail;

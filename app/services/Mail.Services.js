@@ -28,14 +28,14 @@ const sendLinkResetPassword = async (email, resetLink) => {
                   <p><a href = "${CLIENT_URL}/authentication/forgotpassword/${resetLink}"> ${CLIENT_URL}/authentication/forgotpassword/${resetLink} </a></p>
                   <p>Trân trọng,</p>
                   Hubert`;
-    const result = await mailer(email, "Forgot Password", body);
+    await mailer(email, "Forgot Password", body);
 
-    if (!result) 
-      return {
-        message: "Try again",
-        success: false,
-        status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-      }
+    // if (!result) 
+    //   return {
+    //     message: "Try again",
+    //     success: false,
+    //     status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+    //   }
     
 
     return {
