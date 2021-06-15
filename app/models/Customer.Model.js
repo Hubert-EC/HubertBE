@@ -26,11 +26,6 @@ const customerSchema = new Schema({
     type: String,
   }, 
   avt : String,
-  // expiresAt: {
-  //   type: Date,
-  //   expires: 86400000,
-  //   default: new Date().setDate(new Date().getDate() + 1),
-  // },
 }, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = Customer = mongoose.model("Customer", customerSchema);

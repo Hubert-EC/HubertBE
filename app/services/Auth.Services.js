@@ -55,7 +55,7 @@ const registerCustomer = async (
     await newAccount.save();
 
     return {
-      message: "Register Successfully",
+      message: "Register Successfully. Verify code has been sent",
       success: true,
       status: HTTP_STATUS_CODE.CREATE,
       data: "",
@@ -383,6 +383,36 @@ const activeDelivery = async (email) => {
     }
   }
 }; //done
+
+const getUserInformation = async (accountID) => {
+  try {
+    const account = await Account.findByID(accountID)
+    if (!account) 
+      return {
+        message: "Account does not exist",
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+        success: false,
+      }
+
+    const user = await Customer.findByID(account.idUser)
+    if (!user)
+      return {
+        message: "User does not exist",
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+        success: false,
+      }
+
+    if (account.role === 'company') {
+      
+    }
+  } catch (error) {
+    return {
+      message: error.message,
+      status: error.status,
+      success: false,
+    }
+  }
+}
 
 module.exports = {
   registerCustomer,

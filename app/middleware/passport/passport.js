@@ -31,7 +31,6 @@ passport.use(
           authType: "google",
           authGoogleID: profile.id,
           accountName: profile.emails[0].value,
-          //username: profile.displayName,
         });
         await newAccount.save();
 
