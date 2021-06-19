@@ -5,8 +5,8 @@ const {
   sendMailContact,
 } = require("../services/Mail.Services");
 const { HTTP_STATUS_CODE } = require("../common/constant");
-const {encodedToken} = require("./Token.Services")
-const bcrypt = require("bcrypt")
+const { encodedToken } = require("./Token.Services");
+const bcrypt = require("bcrypt");
 
 const registerCustomer = async (
   username,
@@ -17,7 +17,10 @@ const registerCustomer = async (
   lastName
 ) => {
   try {
-    const emailExists = await Account.findOne({ accountName: email });
+    const emailExists = await Account.countDocuments(
+      { accountName: email, authType: "local" },
+      (err, count) => count
+    );
     if (emailExists)
       return {
         message: "Email already exists",
@@ -25,7 +28,10 @@ const registerCustomer = async (
         status: HTTP_STATUS_CODE.FORBIDDEN,
       };
 
-    const phoneExists = await Account.findOne({ phone });
+    const phoneExists = await Account.countDocuments(
+      { phone: phone, authType: "local" },
+      (err, count) => count
+    );
     if (phoneExists)
       return {
         message: "Phone already exits",
@@ -44,7 +50,7 @@ const registerCustomer = async (
       lastName,
     });
     await newCustomer.save();
-   
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newAccount = new Account({});
     newAccount.accountName = email;
@@ -55,7 +61,7 @@ const registerCustomer = async (
     await newAccount.save();
 
     return {
-      message: "Register Successfully",
+      message: "Register Successfully. Verify code has been sent",
       success: true,
       status: HTTP_STATUS_CODE.CREATE,
       data: "",
@@ -79,7 +85,10 @@ const registerDeliveryCompany = async (
   lastName
 ) => {
   try {
-    const emailExists = await Account.findOne({ accountName: email });
+    const emailExists = await Account.countDocuments(
+      { accountName: email, authType: "local" },
+      (err, count) => count
+    );
     if (emailExists)
       return {
         message: "Email already exists",
@@ -87,7 +96,10 @@ const registerDeliveryCompany = async (
         status: HTTP_STATUS_CODE.FORBIDDEN,
       };
 
-    const phoneExists = await Account.findOne({ phone });
+    const phoneExists = await Account.countDocuments(
+      { phone: phone, authType: "local" },
+      (err, count) => count
+    );
     if (phoneExists)
       return {
         message: "Phone already exits",
@@ -116,7 +128,8 @@ const registerDeliveryCompany = async (
 
     await sendMailContact(email);
     return {
-      message: "Register Successfully. Please check your email for more information",
+      message:
+        "Register Successfully. Please check your email for more information",
       success: true,
       status: HTTP_STATUS_CODE.CREATE,
       data: "",
@@ -132,7 +145,7 @@ const registerDeliveryCompany = async (
 
 const login = async (email, password) => {
   try {
-    const account = await Account.findOne({ accountName: email });
+    const account = await Account.findOne({ accountName: email, authType: "local" });
     if (!account) {
       return {
         message: "User with this email does not exist",
@@ -141,10 +154,7 @@ const login = async (email, password) => {
       };
     }
 
-    const isCorrectPassword = await bcrypt.compare(
-      password,
-      account.password
-    );
+    const isCorrectPassword = await bcrypt.compare(password, account.password);
     if (!isCorrectPassword) {
       return {
         message: "Password is incorrect",
@@ -153,19 +163,22 @@ const login = async (email, password) => {
       };
     }
 
-    if (account.isVerified === false ) {
-      let message = ""
+    if (account.isVerified === false) {
+      let message = "";
       switch (account.role) {
         case "customer":
-          const otp = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
+          const otp = Math.floor(
+            Math.random() * (999999 - 100000 + 1) + 100000
+          );
           account.otp = otp + "";
           await account.save();
           await sendCodeMail(email, otp);
 
-          message = "Please verify your account"
+          message = "Please verify your account";
           break;
         case "company":
-          message = "Your enterprise account will be activated after contracting"
+          message =
+            "Your enterprise account will be activated after contracting";
           break;
         default:
           break;
@@ -195,8 +208,7 @@ const login = async (email, password) => {
 
 const forgotPassword = async (email) => {
   try {
-    const account = await Account.findOne({ accountName: email });
-
+    const account = await Account.findOne({ accountName: email, authType: 'local' });
     if (!account) {
       return {
         success: false,
@@ -209,13 +221,13 @@ const forgotPassword = async (email) => {
     account.resetLink = resetLink;
     await account.save();
 
-    await sendLinkResetPassword(email, resetLink);
+    const result = await sendLinkResetPassword(email, resetLink);
 
     return {
-      message: "Reset password link has been sent",
+      message: result.message,
       data: "",
       success: true,
-      status: HTTP_STATUS_CODE.OK,
+      status: result.status,
     };
   } catch (error) {
     return {
@@ -297,7 +309,7 @@ const changePassword = async (id, oldPass, newPass) => {
 
 const verifyOtp = async (email, otp) => {
   try {
-    const account = await Account.findOne({ accountName: email });
+    const account = await Account.findOne({ accountName: email, authType: 'local' });
     if (account) {
       if (account.otp === otp) {
         account.isVerified = true;
@@ -358,13 +370,13 @@ const checkRole = async (req, res, next) => {
 
 const activeDelivery = async (email) => {
   try {
-    const account = await Account.findOne({accountName: email})
-    if (!account) 
+    const account = await Account.findOne({ accountName: email, role: "company" });
+    if (!account)
       return {
         success: false,
         message: "User not found",
         status: HTTP_STATUS_CODE.NOT_FOUND,
-      }
+      };
 
     account.isVerified = true;
     await account.save();
@@ -374,15 +386,44 @@ const activeDelivery = async (email) => {
       data: "",
       message: "Active Successfully",
       status: HTTP_STATUS_CODE.OK,
+    };
+  } catch (error) {
+    return {
+      message: error.message,
+      status: error.status,
+      success: false,
+    };
+  }
+}; //done
+
+const getUserInformation = async (accountID) => {
+  try {
+    const account = await Account.findByID(accountID);
+    if (!account)
+      return {
+        message: "Account does not exist",
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+        success: false,
+      };
+
+    const user = await Customer.findByID(account.idUser);
+    if (!user)
+      return {
+        message: "User does not exist",
+        status: HTTP_STATUS_CODE.NOT_FOUND,
+        success: false,
+      };
+
+    if (account.role === "company") {
     }
   } catch (error) {
     return {
       message: error.message,
       status: error.status,
       success: false,
-    }
+    };
   }
-}; //done
+};
 
 module.exports = {
   registerCustomer,
