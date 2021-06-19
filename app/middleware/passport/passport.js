@@ -1,10 +1,7 @@
 const passport = require("passport");
-const JwtStrategy = require("passport-jwt").Strategy;
 const GooglePlusTokenStrategy = require("passport-google-plus-token");
 const FacebookTokenStrategy = require("passport-facebook-token");
-const { ExtractJwt } = require("passport-jwt");
 const {
-  JWT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
@@ -21,17 +18,15 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const user = await Account.countDocuments(
-          { authGoogleID: profile.id, authType: "google" },
-          (err, count) => count
-        );
+        const user = await Account.findOne({authGoogleID: profile.id})
+
         if (user) return done(null, user);
 
         const newAccount = new Account({
           authType: "google",
           authGoogleID: profile.id,
           accountName: profile.emails[0].value,
-          //username: profile.displayName,
+          isVerified: true,
         });
         await newAccount.save();
 
@@ -44,8 +39,8 @@ passport.use(
         await newCustomer.save();
 
         done(null, newAccount);
-      } catch (err) {
-        done(err, false);
+      } catch (error) {
+        done(error, false);
       }
     }
   )
@@ -59,10 +54,8 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const user = await Account.countDocuments(
-          { authFacebookID: profile.id, authType: "facebook" },
-          (err, count) => count
-        );
+        const user = await Account.findOne({authFacebookID: profile.id})
+
         if (user) return done(null, user);
 
         const newAccount = new Account({
@@ -77,11 +70,12 @@ passport.use(
           firstName: profile.name.familyName,
           lastName: profile.name.givenName,
           username: profile.displayName,
+          isVerified: true,
         });
         await newCustomer.save();
         done(null, newAccount);
-      } catch (err) {
-        done(err, false);
+      } catch (error) {
+        done(error, false);
       }
     }
   )

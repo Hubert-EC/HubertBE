@@ -15,11 +15,12 @@ const { HTTP_STATUS_CODE } = require("../common/constant.js");
 const handleAuthGoogle = async (req, res, next) => {
   try {
     const accessToken = encodedToken(req.user._id);
+    const role = req.user.role
     res.setHeader("Authorization", accessToken);
     return sendSuccess(
       res,
-      accessToken,
-      "Register Successfully",
+      {accessToken: accessToken, role: role},
+      "Login Successfully",
       HTTP_STATUS_CODE.CREATE
     );
   } catch (error) {
@@ -30,11 +31,12 @@ const handleAuthGoogle = async (req, res, next) => {
 const handleAuthFacebook = async (req, res, next) => {
   try {
     const accessToken = encodedToken(req.user._id);
+    const role = req.user.role
     res.setHeader("Authorization", accessToken);
     return sendSuccess(
       res,
-      accessToken,
-      "Register Successfully",
+      {accessToken: accessToken, role: role},
+      "Login Successfully",
       HTTP_STATUS_CODE.CREATE
     );
   } catch (error) {

@@ -5,7 +5,6 @@ const accountSchema = new Schema({
   accountName: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
@@ -14,7 +13,6 @@ const accountSchema = new Schema({
   phone: {
     type: String,
     match: /^0\d{9}$/,
-    unique: true,
   }, 
   role: {
     type: String,
@@ -44,10 +42,12 @@ const accountSchema = new Schema({
   authGoogleID: {
     type: String,
     default: null,
+    unique: true,
   },
   authFacebookID: {
     type: String,
     default: null,
+    unique: true,
   },
 }, { timestamps: { createdAt: 'created_at' } });
 
