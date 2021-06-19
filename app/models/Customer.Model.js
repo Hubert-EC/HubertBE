@@ -14,13 +14,11 @@ const customerSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
     required: true,
   },
   phone: {
     type: String,
     match: /^0\d{9}$/,
-    unique: true,
   },
   address: {
     type: String,
