@@ -1,0 +1,37 @@
+{
+  "name": "UTE1.21-EC18A009-BE",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/Hubert-EC/HubertBE",
+  "author": "theleehari <nhai30928@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": "14.15.5",
+    "yarn": "1.22.10"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js "
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.5.0",
+    "passport": "^0.4.1",
+    "passport-facebook-token": "^4.0.0",
+    "passport-google-plus-token": "^2.1.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "paypal-rest-sdk": "^1.8.1",
+    "query-string": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
